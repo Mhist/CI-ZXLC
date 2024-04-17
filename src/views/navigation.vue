@@ -75,7 +75,13 @@
             img: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
             title: '效能评估',
             path: '/index'
-          }
+          },
+          {
+  id: 10,
+  img: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+  title: '表单编辑器',
+  path: '/formMaking'
+}
         ]
       }
     },

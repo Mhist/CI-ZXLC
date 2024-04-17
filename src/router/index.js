@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import LanguageView from '../components/FormMaking/LanguageView.vue'
+import FormMaking from '@/views/formMaking.vue'
+import Home from '@/demo/Home.vue'
 
+const language = localStorage.getItem('language') || (navigator.language == 'zh-CN' ? 'zh-CN' : 'en-US')
 Vue.use(Router)
 
 /* Layout */
@@ -41,6 +45,34 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/',
+    redirect: to => ({ name: 'index', params: {  } })
+  },
+  {
+    path: '/formMaking',
+    // name: 'lang',
+    component: FormMaking,
+    children: [
+      {
+        path: '',
+        name: 'index',
+        component: FormMaking
+      }
+    ]
+  },
+  // {
+    // path: '/:lang',
+    // name: 'lang',
+    // component: LanguageView,
+    // children: [
+      // {
+        // path: '',
+        // name: 'index',
+        // component: Home
+      // }
+    // ]
+  // },
   {
     path: '/login',
     component: () => import('@/views/login'),

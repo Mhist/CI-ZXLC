@@ -1,0 +1,61 @@
+/* 公共样式 */
+/* 主色调 */
+:root {
+  --primary-color: #409EFF;
+}
+
+/* 按钮 */
+.el-button {
+  color: #fff;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.el-button:hover,
+.el-button:focus {
+  color: #fff;
+  background-color: #66b1ff;
+  border-color: #66b1ff;
+}
+.el-button:active {
+  color: #fff;
+  background-color: #3a8ee6;
+  border-color: #3a8ee6;
+}
+
+/* 标签页 */
+.el-tabs__nav-item.is-active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+/* 输入框 */
+.el-input__inner:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+/* 下拉框 */
+.el-select .el-input__inner:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+/* 表格 */
+.el-table .is-selected {
+  background-color: #f5f7fa;
+}
+
+/* 分页 */
+.el-pagination__item.is-active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+/* 自定义样式 */
+/* 系统标题 */
+.system-title {
+  font-size: 24px;
+  color: var(--primary-color);
+  font-weight: bold;
+}

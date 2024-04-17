@@ -2,6 +2,8 @@
 node_modules/
 node_modules_u盘原始/
 node_modules_success/
+node_modules_集成formMaking依赖能正常跑起来/
+node_modules_集成i18n/
 dist/
 npm-debug.log*
 yarn-debug.log*

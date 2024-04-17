@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es5",//目标打包成es5的代码
+    "module": "esnext",//使用模块化的时候，使用es的模块化
+    "baseUrl": "./",//决定路径的src相当于当前目录
+    "moduleResolution": "node",//模块的查找顺序按照node的顺序进行查找
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      //配置utils
+     " utils/*":[
+      "src/utils/*"
+     ]
+    },
+    "lib": [//可能会用的库
+      "esnext",
+      "dom",
+      "dom.iterable",//使用可迭代对象有更有好的方法提示
+      "scripthost"//提供更友好的数组环境
+    ]
+  }
+}
+

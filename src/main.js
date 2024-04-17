@@ -1,7 +1,7 @@
 import Vue from 'vue'
-
 import Cookies from 'js-cookie'
-
+import VueI18n from 'vue-i18n'
+import VueEditor from 'vue2-editor'
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
@@ -38,6 +38,15 @@ import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
 
+
+
+
+import enLocale from 'element-ui/lib/locale/lang/en'
+import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+
+Vue.use(VueI18n)
+Vue.use(VueEditor)
+
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
@@ -61,6 +70,39 @@ Vue.component('ImagePreview', ImagePreview)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+
+
+const messages = {
+  'en-US': {
+    header: {
+      title: 'FormMaking',
+      document: 'Docs',
+      pricing: 'Pricing',
+      advanced: 'Advanced',
+    }
+  },
+  'zh-CN': {
+    header: {
+      title: '表单设计器',
+      document: '使用文档',
+      pricing: '商业授权',
+      advanced: '高级版本',
+    }
+  }
+}
+
+const i18n = new VueI18n({
+  messages: {
+    'en-US': {
+      ...enLocale, ...messages['en-US']
+    },
+    'zh-CN': {
+      ...zhLocale, ...messages['zh-CN']
+    }
+  }
+})
+
+
 DictData.install()
 
 /**
@@ -73,13 +115,21 @@ DictData.install()
  */
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium' // set element-ui default size
+  size: Cookies.get('size') || 'medium', // set element-ui default size
+  i18n: (key, value) => i18n.t(key, value)
 })
+
+import FormMaking from './formMaking'
+Vue.use(FormMaking, {
+  i18n
+})
+
 
 Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
+  i18n,
   router,
   store,
   render: h => h(App)
