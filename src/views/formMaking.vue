@@ -7,6 +7,7 @@
       generate-code
       generate-json
       clearable
+      :layout-fields="['grid', 'tabs']"
     >
       <template slot="action"> </template>
     </fm-making-form>
@@ -16,8 +17,7 @@
 <script>
 export default {
   name: "FormMaking",
-  methods: {
-  },
+  methods: {},
 };
 </script>
 

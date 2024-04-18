@@ -136,6 +136,7 @@ export default {
         hex: '十六进制',
         gutter: '栅格间隔',
         columnOption: '列配置项',
+        tabOption:'标签页配置项',
         span: '栅格值',
         justify: '水平排列方式',
         justifyStart: '左对齐',

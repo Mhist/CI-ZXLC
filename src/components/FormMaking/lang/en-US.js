@@ -136,6 +136,7 @@ export default {
         hex: 'Hexadecimal',
         gutter: 'Grid Spacing',
         columnOption: 'Column Configuration',
+        tabOption: 'Tab Configuration',
         span: 'Grid spans',
         justify: 'Horizontal Arrangement',
         justifyStart: 'Start',

@@ -1,11 +1,15 @@
 <template>
   <div class="fm-style">
-    <el-form ref="generateForm" 
+    <el-form
+      ref="generateForm"
       label-suffix=":"
       :size="data.config.size"
-      :model="models" :rules="rules" :label-position="data.config.labelPosition" :label-width="data.config.labelWidth + 'px'">
+      :model="models"
+      :rules="rules"
+      :label-position="data.config.labelPosition"
+      :label-width="data.config.labelWidth + 'px'"
+    >
       <template v-for="item in data.list">
-
         <template v-if="item.type == 'grid'">
           <el-row
             :key="item.key"
@@ -14,25 +18,67 @@
             :justify="item.options.justify"
             :align="item.options.align"
           >
-            <el-col v-for="(col, colIndex) in item.columns" :key="colIndex" :span="col.span">
-              
+            <el-col
+              v-for="(col, colIndex) in item.columns"
+              :key="colIndex"
+              :span="col.span"
+            >
 
-              <template v-for="citem in col.list" >
-                <el-form-item v-if="citem.type=='blank'" :label="citem.name" :prop="citem.model" :key="citem.key">
+              <template v-for="citem in col.list">
+                <el-form-item
+                  v-if="citem.type == 'blank'"
+                  :label="citem.name"
+                  :prop="citem.model"
+                  :key="citem.key"
+                >
                   <slot :name="citem.model" :model="models"></slot>
                 </el-form-item>
-                <generate-form-item v-else 
-                  :key="citem.key" 
-                  :models.sync="models" 
-                  :remote="remote" 
-                  :rules="rules" 
+                <generate-form-item
+                  v-else
+                  :key="citem.key"
+                  :models.sync="models"
+                  :remote="remote"
+                  :rules="rules"
                   :widget="citem"
                   :edit="edit"
-                  @input-change="onInputChange">
+                  @input-change="onInputChange"
+                >
                 </generate-form-item>
               </template>
             </el-col>
           </el-row>
+        </template>
+
+        <template v-else-if="item.type == 'tabs'">
+          <el-tabs
+            :key="item.key"
+            v-model="item.options.defaultValue"
+            :type="item.options.type"
+            :closable="item.options.closeable"
+            :style="{ width: item.options.width }"
+          >
+
+          
+            <el-tab-pane
+              v-for="tabData in item.tabData"
+              :key="tabData.name"
+              :label="tabData.title"
+              :name="tabData.name"
+            >
+
+            <template>
+              <GenerateFormItem 
+              v-for="citem in tabData.list"
+                :key="citem.key"
+                :models="models"
+                :remote="remote"
+                :rules="rules"
+                :widget="citem"
+              >
+              </GenerateFormItem>
+            </template>
+            </el-tab-pane>
+          </el-tabs>
         </template>
 
         <template v-else-if="item.type == 'blank'">
@@ -42,133 +88,145 @@
         </template>
 
         <template v-else>
-          <generate-form-item 
-            :key="item.key" 
-            :models.sync="models" 
-            :rules="rules" 
-            :widget="item" 
+          <generate-form-item
+            :key="item.key"
+            :models.sync="models"
+            :rules="rules"
+            :widget="item"
             :edit="edit"
             @input-change="onInputChange"
-            :remote="remote">
+            :remote="remote"
+          >
           </generate-form-item>
         </template>
-        
       </template>
     </el-form>
   </div>
 </template>
 
 <script>
-import GenerateFormItem from './GenerateFormItem'
-import {loadJs} from '../FormMaking/utils/index.js'
+import GenerateFormItem from "./GenerateFormItem";
+import { loadJs } from "../FormMaking/utils/index.js";
 
 export default {
-  name: 'fm-generate-form',
+  name: "fm-generate-form",
   components: {
-    GenerateFormItem
+    GenerateFormItem,
   },
   props: {
     data: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     remote: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     value: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     edit: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  data () {
+  data() {
     return {
       models: {},
-      rules: {}
-    }
+      rules: {},
+    };
   },
-  created () {
-    this.generateModle(this.data.list)
+  created() {
+    this.generateModle(this.data.list);
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    generateModle (genList) {
+    generateModle(genList) {
       for (let i = 0; i < genList.length; i++) {
-        if (genList[i].type === 'grid') {
-          genList[i].columns.forEach(item => {
-            this.generateModle(item.list)
-          })
+        if (genList[i].type === "grid") {
+          genList[i].columns.forEach((item) => {
+            this.generateModle(item.list);
+          });
         } else {
-          if (this.value && Object.keys(this.value).indexOf(genList[i].model) >= 0) {
-            this.models[genList[i].model] = this.value[genList[i].model]
+          if (
+            this.value &&
+            Object.keys(this.value).indexOf(genList[i].model) >= 0
+          ) {
+            this.models[genList[i].model] = this.value[genList[i].model];
           } else {
-            if (genList[i].type === 'blank') {
-              this.$set(this.models, genList[i].model, genList[i].options.defaultType === 'String' ? '' : (genList[i].options.defaultType === 'Object' ? {} : []))
+            if (genList[i].type === "blank") {
+              this.$set(
+                this.models,
+                genList[i].model,
+                genList[i].options.defaultType === "String"
+                  ? ""
+                  : genList[i].options.defaultType === "Object"
+                  ? {}
+                  : []
+              );
             } else {
-              this.models[genList[i].model] = genList[i].options.defaultValue
-            }      
+              this.models[genList[i].model] = genList[i].options.defaultValue;
+            }
           }
-          
+
           if (this.rules[genList[i].model]) {
-            
-            this.rules[genList[i].model] = [...this.rules[genList[i].model], ...genList[i].rules.map(item => {
-              if (item.pattern) {
-                return {...item, pattern: new RegExp(item.pattern)}
-              } else {
-                return {...item}
-              }
-            })]
+            this.rules[genList[i].model] = [
+              ...this.rules[genList[i].model],
+              ...genList[i].rules.map((item) => {
+                if (item.pattern) {
+                  return { ...item, pattern: new RegExp(item.pattern) };
+                } else {
+                  return { ...item };
+                }
+              }),
+            ];
           } else {
-            
-            this.rules[genList[i].model] = [...genList[i].rules.map(item => {
-              if (item.pattern) {
-                return {...item, pattern: new RegExp(item.pattern)}
-              } else {
-                return {...item}
-              }
-            })]
-          }      
+            this.rules[genList[i].model] = [
+              ...genList[i].rules.map((item) => {
+                if (item.pattern) {
+                  return { ...item, pattern: new RegExp(item.pattern) };
+                } else {
+                  return { ...item };
+                }
+              }),
+            ];
+          }
         }
       }
     },
-    getData () {
+    getData() {
       return new Promise((resolve, reject) => {
-        this.$refs.generateForm.validate(valid => {
+        this.$refs.generateForm.validate((valid) => {
           if (valid) {
-            resolve(this.models)
+            resolve(this.models);
           } else {
-            reject(new Error(this.$t('fm.message.validError')).message)
+            reject(new Error(this.$t("fm.message.validError")).message);
           }
-        })
-      })
+        });
+      });
     },
-    reset () {
-      this.$refs.generateForm.resetFields()
+    reset() {
+      this.$refs.generateForm.resetFields();
     },
-    onInputChange (value, field) {
-      this.$emit('on-change', field, value, this.models)
+    onInputChange(value, field) {
+      this.$emit("on-change", field, value, this.models);
     },
-    disabled (fields, disabled) {
-      if (typeof fields === 'string') {
-        fields = [fields]
+    disabled(fields, disabled) {
+      if (typeof fields === "string") {
+        fields = [fields];
       }
-      this._setDisabled(this.data.list, fields, disabled)
+      this._setDisabled(this.data.list, fields, disabled);
     },
-    _setDisabled (genList, fields, disabled) {
+    _setDisabled(genList, fields, disabled) {
       for (let i = 0; i < genList.length; i++) {
-        if (genList[i].type === 'grid') {
-          genList[i].columns.forEach(item => {
-            this._setDisabled(item.list, fields, disabled)
-          })
+        if (genList[i].type === "grid") {
+          genList[i].columns.forEach((item) => {
+            this._setDisabled(item.list, fields, disabled);
+          });
         } else {
           if (fields.indexOf(genList[i].model) >= 0) {
-            
-            this.$set(genList[i].options, 'disabled', disabled)
+            this.$set(genList[i].options, "disabled", disabled);
           }
         }
       }
@@ -177,19 +235,19 @@ export default {
   watch: {
     data: {
       deep: true,
-      handler (val) {
-        this.generateModle(val.list)
-      }
+      handler(val) {
+        this.generateModle(val.list);
+      },
     },
     value: {
       deep: true,
-      handler (val) {
-        console.log(JSON.stringify(val))
-        this.models = {...this.models, ...val}
-      }
-    }
-  }
-}
+      handler(val) {
+        console.log(JSON.stringify(val));
+        this.models = { ...this.models, ...val };
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss">

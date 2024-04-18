@@ -232,17 +232,17 @@ export default {
     }
   },
   created () {
-    if (this.widget.options.remote && this.remote[this.widget.options.remoteFunc]) {
-      this.remote[this.widget.options.remoteFunc]((data) => {
-        this.widget.options.remoteOptions = data.map(item => {
-          return {
-            value: item[this.widget.options.props.value],
-            label: item[this.widget.options.props.label],
-            children: item[this.widget.options.props.children]
-          }
-        })
-      })
-    }
+    // if (this.widget.options.remote && this.remote[this.widget.options.remoteFunc]) {
+    //   this.remote[this.widget.options.remoteFunc]((data) => {
+    //     this.widget.options.remoteOptions = data.map(item => {
+    //       return {
+    //         value: item[this.widget.options.props.value],
+    //         label: item[this.widget.options.props.label],
+    //         children: item[this.widget.options.props.children]
+    //       }
+    //     })
+    //   })
+    // }
 
     if (this.widget.type === 'imgupload' && this.widget.options.isQiniu) {
       this.remote[this.widget.options.tokenFunc]((data) => {

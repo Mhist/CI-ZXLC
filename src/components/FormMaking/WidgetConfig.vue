@@ -1,10 +1,10 @@
 <template>
   <div v-if="show">
     <el-form label-position="top">
-      <el-form-item :label="$t('fm.config.widget.model')" v-if="data.type!='grid' || data.type!='tabs' " >
+      <el-form-item :label="$t('fm.config.widget.model')" >
         <el-input v-model="data.model"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('fm.config.widget.name')" v-if="data.type!='grid' || data.type!='tabs' ">
+      <el-form-item :label="$t('fm.config.widget.name')">
         <el-input v-model="data.name"></el-input>
       </el-form-item>
       <el-form-item :label="$t('fm.config.widget.width')" v-if="Object.keys(data.options).indexOf('width')>=0">
@@ -268,7 +268,7 @@
         </el-form-item>
       </template>
 
-      <template v-if="data.type == 'grid' || data.type== 'tabs'">
+      <template v-if="data.type == 'grid'">
         <el-form-item :label="$t('fm.config.widget.gutter')">
           <el-input type="number" v-model.number="data.options.gutter"></el-input>
         </el-form-item>
@@ -307,8 +307,37 @@
         </el-form-item>
       </template>
 
+      <!-- 处理Tab -->
+      <template v-if="data.type == 'tabs'">
+        <el-form-item :label="$t('fm.config.widget.gutter')">
+          <span>{{ data }}</span>
+        </el-form-item>
+       
+        <el-form-item :label="$t('fm.config.widget.tabOption')">
+          <draggable tag="ul" :list="data.tabData"
+            v-bind="{group:{ name:'options'}, ghostClass: 'ghost',handle: '.drag-item'}"
+            handle=".drag-item"
+          >
+            <li v-for="(item, index) in data.tabData" :key="index" >
+              <i class="drag-item" style="font-size: 16px;margin: 0 5px;cursor: move;"><i class="iconfont icon-icon_bars"></i></i>
+              <el-input :placeholder="$t('fm.config.widget.newOption')" size="mini" style="width: 100px;"  v-model.trim="item.title"></el-input>
 
-      <template v-if="data.type != 'grid' || data.type != 'tabs' ">
+              <el-button @click="handleOptionsRemove(index)" circle plain type="danger" size="mini" icon="el-icon-minus" style="padding: 4px;margin-left: 5px;"></el-button>
+
+            </li>
+          </draggable>
+          <div style="margin-left: 22px;">
+            <el-button type="text" @click="handleAddTab">{{$t('fm.actions.addOption')}}</el-button>
+          </div>
+        </el-form-item>
+        
+       
+      </template>
+
+
+
+       <!--以上处理Tab -->
+      <template v-if="data.type != 'grid' && data.type != 'tabs' ">
         <el-form-item :label="$t('fm.config.widget.attribute')">
           <el-checkbox v-model="data.options.readonly" v-if="Object.keys(data.options).indexOf('readonly')>=0">{{$t('fm.config.widget.readonly')}}</el-checkbox>
           <el-checkbox v-model="data.options.disabled" v-if="Object.keys(data.options).indexOf('disabled')>=0">{{$t('fm.config.widget.disabled')}}	</el-checkbox>
@@ -319,7 +348,7 @@
           <el-checkbox v-model="data.options.isEdit" v-if="Object.keys(data.options).indexOf('isEdit')>=0">{{$t('fm.config.widget.isEdit')}}</el-checkbox>
 
         </el-form-item>
-        <el-form-item :label="$t('fm.config.widget.validate')">
+        <el-form-item :label="$t('fm.config.widget.validate')" v-if="data.type != 'grid' && data.type != 'tabs' " >
           <div v-if="Object.keys(data.options).indexOf('required')>=0">
             <el-checkbox v-model="data.options.required">{{$t('fm.config.widget.required')}}</el-checkbox>
           </div>
@@ -334,7 +363,7 @@
             <el-option value="hex" :label="$t('fm.config.widget.hex')"></el-option>
           </el-select>
 
-          <div v-if="Object.keys(data.options).indexOf('pattern')>=0">
+          <div v-if="Object.keys(data.options).indexOf('pattern')>=0" >
             <el-input size="mini" class="config-pattern-input" v-model.lazy="data.options.pattern"  style=" width: 240px;" :placeholder="$t('fm.config.widget.patternPlaceholder')">
               <template slot="prepend" >/</template>
               <template slot="append" >/</template>
@@ -375,8 +404,10 @@ export default {
   },
   methods: {
     handleOptionsRemove (index) {
-      if (this.data.type === 'grid' || this.data.type === 'tabs') {
+      if (this.data.type === 'grid') {
         this.data.columns.splice(index, 1)
+      }else if(this.data.type === 'tabs'){
+        this.data.tabData.splice(index, 1)
       } else {
         this.data.options.options.splice(index, 1)
       }
@@ -400,6 +431,15 @@ export default {
         span: '',
         list: []
       })
+    },
+
+    handleAddTab(){
+     let newTab = {
+      list:[],
+      name: 'tabname_' + Date.parse(new Date().toString()) + '_' + Math.ceil(Math.random() * 99999),
+      title:''
+     }
+     this.data.tabData.push(newTab);
     },
     generateRule () {
       this.data.rules = []

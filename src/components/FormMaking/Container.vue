@@ -56,7 +56,8 @@
                       <a>
                         <i class="icon iconfont" :class="item.icon"></i>
                         <span>{{item.name}}</span>
-                        <span>{{item.type}}</span>
+                        <!-- <span>{{item.type}}</span> -->
+                        <span>{{'jiang'}}</span>
                       </a>
                     </li>
                   </template>               
