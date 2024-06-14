@@ -113,7 +113,7 @@ export const constantRoutes = [
   },
   {
     path: '/cesiumView',
-    component: () => import('@/views/cesiumView'),
+    component: () => import('@/views/cesiumView/cesiumView'),
     hidden: true
   },
   {

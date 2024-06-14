@@ -119,7 +119,7 @@ export default {
   }
 }
 .fm-container{
-  height: calc(100% - 50px);
+  // height: calc(100% - 50px);
 }
 *, :after, :before {
     -webkit-box-sizing: border-box;
@@ -134,7 +134,6 @@ html,body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  min-height: 100%;
   height: 100%;
 }
 </style>
